@@ -1,4 +1,4 @@
-import { InfoIcon } from "lucide-react";
+import { Edit2, InfoIcon, Settings2 } from "lucide-react";
 
 export function HeaderComponent() {
     return (
