@@ -11,11 +11,11 @@ const config: Config = {
       colors: {
         primary: "#fe5a1d",
         secondary: "",
-        dark: "#111111",
-        light: "#f2f3f4"
+        onPrimary: "#111111",
+        light: "#f2f3f4",
       },
       fontFamily: {
-        'sans': ['Inter', 'ui-sans-serif', 'system-ui']
+        sans: ["Inter", "ui-sans-serif", "system-ui"],
       },
       boxShadow: {
         shape:

@@ -1,9 +1,13 @@
 "use client";
 
-import { pauseTimer, startTimer, stopTimer } from "@/lib/features/timer/timer.slice";
+import {
+  pauseTimer,
+  startTimer,
+  stopTimer,
+} from "@/lib/features/timer/timer.slice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import clsx from "clsx";
-import { PauseIcon, PlayIcon, Settings2, StopCircle } from "lucide-react";
+import { PauseIcon, PlayIcon, RotateCcwIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 export function TimerComponent() {
@@ -44,42 +48,38 @@ export function TimerComponent() {
   }, [dispatch]);
 
   return (
-    <div className="w-full flex justify-center items-center">
-      <div className="flex flex-col items-center justify-between md:justify-center md:my-10 my-16">
-        <div className="text-5xl text-white">
-          {minutes}:{seconds.toString().padStart(2, "0")}
-        </div>
-
-        <div className="flex flex-row items-center justify-center gap-5 mt-5">
-          <button 
-            onClick={handleStartTimer} 
-            type="button"
-            className={clsx(isRunning ? "hidden" : "")}
-          >
-                <PlayIcon className="text-white size-10" />
-          </button>
-          <button 
-            onClick={handlePauseTimer} 
-            type="button"
-            className={clsx(isRunning ? "" : "hidden")}
-          >
-                <PauseIcon className="text-white size-10" />
-          </button>
-          <button 
-            onClick={handleStopTimer} 
-            type="button"
-            className={clsx(isRunning ? "" : "hidden")}
-          >
-                <StopCircle className="text-white size-10" />
-          </button>
-          <button 
-            onClick={handleStartTimer} 
-            type="button"
-            className={clsx(isRunning ? "hidden" : "")}
-          >
-                <Settings2 className="text-white size-10" />
-          </button>
-        </div>
+    <div className="flex flex-col items-center justify-center gap-4 mt-24 ">
+      <span className="text-3xl text-zinc-300 font-bold mb-1">
+        {minutes}:{seconds.toString().padStart(2, "0")}
+      </span>
+      <div className="flex flex-row gap-2">
+        <button
+          onClick={handleStartTimer}
+          className={clsx(
+            isRunning ? "hidden" : "",
+            "p-3 border-[.5px] border-zinc-700 rounded-xl hover:brightness-150"
+          )}
+          type="button"
+        >
+          <PlayIcon className="text-zinc-300 size-5" />
+        </button>
+        <button
+          onClick={handlePauseTimer}
+          className={clsx(
+            isRunning ? "" : "hidden",
+            "p-3 border-[.5px] border-zinc-700 rounded-xl hover:brightness-150"
+          )}
+          type="button"
+        >
+          <PauseIcon className="text-zinc-300 size-5" />
+        </button>
+        <button
+          onClick={handleStopTimer}
+          className="p-3 border-[.5px] border-zinc-700 rounded-xl hover:brightness-150"
+          type="button"
+        >
+          <RotateCcwIcon className="text-zinc-300 size-5" />
+        </button>
       </div>
     </div>
   );
