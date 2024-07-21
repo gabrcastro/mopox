@@ -1,4 +1,3 @@
-import { AppThunk } from "@/lib/store";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface State {
@@ -18,9 +17,9 @@ export const timerSlice = createSlice({
   initialState,
   reducers: {
     setInitialState: (state) => {
-        state.minutes = 24;
-        state.seconds = 10;
-        state.isRunning = false;
+      state.minutes = 24;
+      state.seconds = 10;
+      state.isRunning = false;
     },
     decrement: (state) => {
       if (state.seconds === 0) {
@@ -42,27 +41,4 @@ export const timerSlice = createSlice({
 });
 
 export const { decrement, start, pause, setInitialState } = timerSlice.actions;
-
-export const startTimer = (): AppThunk => (dispatch) => {
-  const intervalId = setInterval(() => {
-    dispatch(decrement());
-  }, 1000);
-  dispatch(start());
-  return intervalId;
-};
-
-export const pauseTimer =
-  (intervalId: number): AppThunk =>
-  (dispatch) => {
-    clearInterval(intervalId);
-    dispatch(pause());
-  };
-
-export const stopTimer =
-  (intervalId: number): AppThunk =>
-  (dispatch) => {
-    clearInterval(intervalId);
-    dispatch(setInitialState());
-  };
-
 export default timerSlice.reducer;

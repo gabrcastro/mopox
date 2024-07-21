@@ -1,5 +1,4 @@
 import TaskListComponent from "./task_list";
-import TaskViewComponent from "./task_view";
 
 export function TasksComponent() {
   return (

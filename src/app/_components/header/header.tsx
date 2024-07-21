@@ -32,13 +32,13 @@ export function HeaderComponent() {
         {/* <div className="w-7 h-7 rounded-full bg-zinc-900 flex items-center justify-center">
           <User2 className="text-zinc-300 size-4" />
         </div> */}
-        <button
+        {/* <button
           onClick={handleOpenAuthModal}
           className="rounded-lg border-[.5px] border-zinc-800 px-3 py-1 hover:brightness-90 hover:cursor-pointer"
           type="button"
         >
           <span className="text-sm text-zinc-300 ">Faça login</span>
-        </button>
+        </button> */}
       </div>
     </div>
   );

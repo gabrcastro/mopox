@@ -1,14 +1,16 @@
 "use client";
 
 import {
-  pauseTimer,
-  startTimer,
-  stopTimer,
+  decrement,
+  pause,
+  setInitialState,
+  start,
 } from "@/lib/features/timer/timer.slice";
+
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import clsx from "clsx";
 import { PauseIcon, PlayIcon, RotateCcwIcon } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 export function TimerComponent() {
   const { minutes, seconds, isRunning } = useAppSelector(
@@ -17,35 +19,53 @@ export function TimerComponent() {
   const dispatch = useAppDispatch();
   const intervalIdRef = useRef<number | null>(null);
 
-  const handleStartTimer = () => {
+  function startTimer() {
+    const intervalId = setInterval(() => {
+      dispatch(decrement());
+    }, 1000);
+    dispatch(start());
+    return intervalId;
+  }
+
+  function pauseTimer(intervalId: number) {
+    clearInterval(intervalId);
+    dispatch(pause());
+  }
+
+  function stopTimer(intervalId: number) {
+    clearInterval(intervalId);
+    dispatch(setInitialState());
+  }
+
+  function handleStartTimer() {
     if (intervalIdRef.current === null) {
-      const intervalId = dispatch(startTimer()) as unknown as number;
+      const intervalId = startTimer() as unknown as number;
       intervalIdRef.current = intervalId;
     }
-  };
+  }
 
-  const handlePauseTimer = () => {
+  function handlePauseTimer() {
     if (isRunning && intervalIdRef.current !== null) {
-      dispatch(pauseTimer(intervalIdRef.current));
+      pauseTimer(intervalIdRef.current);
       intervalIdRef.current = null;
     }
-  };
+  }
 
-  const handleStopTimer = () => {
+  function handleStopTimer() {
     if (isRunning && intervalIdRef.current !== null) {
-      dispatch(stopTimer(intervalIdRef.current));
+      stopTimer(intervalIdRef.current);
       intervalIdRef.current = null;
     }
-  };
+  }
 
-  useEffect(() => {
-    // Cleanup the interval when the component unmounts
-    return () => {
-      if (intervalIdRef.current !== null) {
-        dispatch(stopTimer(intervalIdRef.current));
-      }
-    };
-  }, [dispatch]);
+  // useEffect(() => {
+  //   // Cleanup the interval when the component unmounts
+  //   return () => {
+  //     if (intervalIdRef.current !== null) {
+  //       stopTimer(intervalIdRef.current);
+  //     }
+  //   };
+  // }, [stopTimer]);
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 mt-24 ">
