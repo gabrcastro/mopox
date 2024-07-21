@@ -1,5 +1,5 @@
-import { TasksComponent } from "./_components/tasks/tasks";
-import { TimerComponent } from "./_components/timer/timer";
+"use client";
+
 import App from "./pages/app";
 import StoreProvider from "./store.provider";
 

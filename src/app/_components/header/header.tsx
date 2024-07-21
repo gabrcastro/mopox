@@ -1,12 +1,17 @@
+import { openAuthModal } from "@/lib/features/auth/auth.slice";
 import { openSettings } from "@/lib/features/settings/settings.slice";
 import { useAppDispatch } from "@/lib/hooks";
-import { LucideSettings2, TimerIcon, User2 } from "lucide-react";
+import { LucideSettings2 } from "lucide-react";
 
 export function HeaderComponent() {
   const dispatch = useAppDispatch();
 
   function handleOpenSettingsModal() {
     dispatch(openSettings());
+  }
+
+  function handleOpenAuthModal() {
+    dispatch(openAuthModal());
   }
 
   return (
@@ -27,9 +32,13 @@ export function HeaderComponent() {
         {/* <div className="w-7 h-7 rounded-full bg-zinc-900 flex items-center justify-center">
           <User2 className="text-zinc-300 size-4" />
         </div> */}
-        <div className="rounded-lg border-[.5px] border-zinc-800 px-3 py-1 hover:brightness-90 hover:cursor-pointer">
+        <button
+          onClick={handleOpenAuthModal}
+          className="rounded-lg border-[.5px] border-zinc-800 px-3 py-1 hover:brightness-90 hover:cursor-pointer"
+          type="button"
+        >
           <span className="text-sm text-zinc-300 ">Faça login</span>
-        </div>
+        </button>
       </div>
     </div>
   );

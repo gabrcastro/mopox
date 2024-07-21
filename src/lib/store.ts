@@ -1,6 +1,7 @@
 import { Action, configureStore } from "@reduxjs/toolkit";
 import timerReducer from "./features/timer/timer.slice";
 import settingsReducer from "./features/settings/settings.slice";
+import authReducer from "./features/auth/auth.slice";
 import { thunk, ThunkAction } from "redux-thunk";
 
 export const makeStore = () => {
@@ -8,6 +9,7 @@ export const makeStore = () => {
     reducer: {
       counter: timerReducer,
       settingsModal: settingsReducer,
+      auth: authReducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk),
   });

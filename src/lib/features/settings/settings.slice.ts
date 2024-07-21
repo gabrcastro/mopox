@@ -1,12 +1,13 @@
-import { AppThunk } from "@/lib/store";
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface State {
-  oppened: boolean;
+  settingsOpened: boolean;
+  // darkTheme: boolean;
 }
 
 export const initialState: State = {
-  oppened: false,
+  settingsOpened: false,
+  // darkTheme: true,
 };
 
 export const settingsSlice = createSlice({
@@ -14,11 +15,17 @@ export const settingsSlice = createSlice({
   initialState,
   reducers: {
     openSettings: (state) => {
-      state.oppened = true;
+      state.settingsOpened = true;
     },
     closeSettings: (state) => {
-      state.oppened = false;
+      state.settingsOpened = false;
     },
+    // darkTheme: (state) => {
+    //   state.darkTheme = true;
+    // },
+    // lightTheme: (state) => {
+    //   state.darkTheme = false;
+    // },
   },
 });
 
