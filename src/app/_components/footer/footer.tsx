@@ -10,8 +10,8 @@ import {
 export default function FooterComponent() {
   return (
     <div className="w-full p-5 border-t-[.5px] border-t-zinc-700 flex flex-col items-center justify-center">
-      <div className="flex items-center justify-center">
-        <span className="text-zinc-300 text-xs flex gap-1">
+      <div className="flex flex-wrap items-center justify-center mt-3">
+        <span className="text-zinc-300 text-[10px] flex gap-1">
           Created by
           <a
             className="underline"
@@ -21,11 +21,29 @@ export default function FooterComponent() {
             Gabriel Castro
           </a>
         </span>
-        <Code className="size-4 text-lime-300 mx-5" />
-        <span className="text-zinc-300 text-xs">
+        <Code className="size-4 text-lime-300 mx-2" />
+        <span className="text-zinc-300 text-[10px]">
           Icons by{" "}
           <a className="underline" target="_blank" href="https://icons8.com/">
             Icons8
+          </a>
+        </span>
+        <Code className="size-4 text-lime-300 mx-2" />
+        <span className="text-zinc-300 text-[10px] gap-1 flex">
+          Sound Effect by
+          <a
+            className="underline"
+            target="_blank"
+            href="https://pixabay.com/users/microsammy-22905943/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=8761"
+          >
+            Microsammy
+          </a>
+          <a
+            className="underline"
+            target="_blank"
+            href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=8761"
+          >
+            Pixabay
           </a>
         </span>
       </div>
