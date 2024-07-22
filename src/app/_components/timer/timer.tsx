@@ -1,23 +1,55 @@
 "use client";
 
 import {
+  alarm,
   decrement,
   pause,
   setInitialState,
+  setTimer,
   start,
+  stop,
 } from "@/lib/features/timer/timer.slice";
 
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import clsx from "clsx";
 import { PauseIcon, PlayIcon, RotateCcwIcon } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function TimerComponent() {
-  const { minutes, seconds, isRunning } = useAppSelector(
+  const { minutes, seconds, isRunning, alarming } = useAppSelector(
     (state) => state.counter
   );
   const dispatch = useAppDispatch();
   const intervalIdRef = useRef<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const min = localStorage.getItem("minutes");
+    const sec = localStorage.getItem("seconds");
+
+    if (!min && !sec) {
+      console.error("No timer saved");
+      throw new Error("No timer saved");
+    }
+
+    dispatch(setTimer({ min: +min!, sec: +sec! }));
+    setIsLoading(false);
+  }, [setIsLoading, dispatch]);
+
+  useEffect(() => {
+    const audioAlarm = new Audio("/sounds/alarm.mp3");
+    if (minutes === 0 && seconds === 0) {
+      dispatch(alarm());
+      if (alarming) {
+        audioAlarm.play();
+        setTimeout(() => {
+          const min = localStorage.getItem("minutes") ?? 25;
+          const sec = localStorage.getItem("seconds") ?? 0;
+          dispatch(stop({ min: +min, sec: +sec }));
+        }, 5000);
+      }
+    }
+  }, [minutes, seconds, alarming, dispatch]);
 
   function startTimer() {
     const intervalId = setInterval(() => {
@@ -69,9 +101,14 @@ export function TimerComponent() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 mt-24 ">
-      <span className="text-3xl text-zinc-300 font-bold mb-1">
-        {minutes}:{seconds.toString().padStart(2, "0")}
-      </span>
+      {isLoading ? (
+        <span className="bg-zinc-900 rounded-xl animate-pulse h-9 w-28 mb-1"></span>
+      ) : (
+        <span className="text-3xl text-zinc-300 font-bold mb-1">
+          {minutes.toString().padStart(2, "0")}:
+          {seconds.toString().padStart(2, "0")}
+        </span>
+      )}
       <div className="flex flex-row gap-2">
         <button
           onClick={handleStartTimer}

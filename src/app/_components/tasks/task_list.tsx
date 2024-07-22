@@ -11,9 +11,11 @@ export default function TaskListComponent() {
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [allTasks, setAllTasks] = useState<Task[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setAllTasks(tasks);
+    setIsLoading(false);
   }, [tasks]);
 
   const handleAddTask = () => {
@@ -43,11 +45,19 @@ export default function TaskListComponent() {
           <PlusIcon className="size-4 text-zinc-950" />
         </button>
       </div>
-      <div className="flex flex-col items-center justify-start gap-2 w-full h-full pb-10">
-        {allTasks.map((task: Task) => (
-          <TaskItem key={task.id} task={task} />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="flex flex-col items-center justify-start gap-2 w-full h-full pb-10">
+          <span className="bg-zinc-900 rounded-xl animate-pulse h-14 w-full mb-1"></span>
+          <span className="bg-zinc-900 rounded-xl animate-pulse h-14 w-full mb-1"></span>
+          <span className="bg-zinc-900 rounded-xl animate-pulse h-14 w-full mb-1"></span>
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-start gap-2 w-full h-full pb-10">
+          {allTasks.map((task: Task) => (
+            <TaskItem key={task.id} task={task} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
