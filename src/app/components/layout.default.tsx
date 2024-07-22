@@ -7,7 +7,7 @@ export default function LayoutDefault({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative flex flex-col w-full items-center h-screen overflow-x-hidden overflow-y-auto">
+    <div className="relative flex flex-col w-full items-center h-screen overflow-x-hidden overflow-y-auto bg-neutral-950">
       <HeaderComponent />
       {children}
       <FooterComponent />

@@ -1,5 +1,3 @@
-"use client";
-
 import App from "./pages/app";
 import StoreProvider from "./store.provider";
 

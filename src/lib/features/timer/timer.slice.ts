@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface State {
   minutes: number;
+  pauseTimer: number;
   seconds: number;
   isRunning: boolean;
   alarming: boolean;
@@ -9,6 +10,7 @@ export interface State {
 
 export const initialState: State = {
   minutes: 25,
+  pauseTimer: 5,
   seconds: 0,
   isRunning: false,
   alarming: false,
@@ -20,6 +22,7 @@ export const timerSlice = createSlice({
   reducers: {
     setInitialState: (state) => {
       state.minutes = 25;
+      state.pauseTimer = 5;
       state.seconds = 0;
       state.isRunning = false;
       state.alarming = false;
@@ -40,18 +43,20 @@ export const timerSlice = createSlice({
     pause: (state) => {
       state.isRunning = false;
     },
-    stop: (state, action: PayloadAction<{ min: number; sec: number }>) => {
-      state.minutes = action.payload.min;
-      state.seconds = action.payload.sec;
+    stop: (state, action: PayloadAction<number>) => {
+      state.minutes = action.payload;
+      state.seconds = 0;
       state.isRunning = false;
       state.alarming = false;
     },
-    setTimer: (state, action: PayloadAction<{ min: number; sec: number }>) => {
-      state.minutes = action.payload.min;
-      state.seconds = action.payload.sec;
+    setTimer: (state, action: PayloadAction<number>) => {
+      state.minutes = action.payload;
     },
     setMinutes: (state, action: PayloadAction<string>) => {
       state.minutes = +action.payload;
+    },
+    setPauseTimer: (state, action: PayloadAction<string>) => {
+      state.pauseTimer = +action.payload;
     },
     setSeconds: (state, action: PayloadAction<string>) => {
       state.seconds = +action.payload;
@@ -69,6 +74,7 @@ export const {
   stop,
   setInitialState,
   setMinutes,
+  setPauseTimer,
   setSeconds,
   setTimer,
   alarm,
