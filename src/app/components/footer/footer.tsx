@@ -21,14 +21,14 @@ export default function FooterComponent() {
             Gabriel Castro
           </a>
         </span>
-        <Code className="size-4 text-lime-300 mx-2" />
+        <Code className="size-4 text-emerald-500 mx-2" />
         <span className="text-zinc-300 text-[10px]">
           Icons by{" "}
           <a className="underline" target="_blank" href="https://icons8.com/">
             Icons8
           </a>
         </span>
-        <Code className="size-4 text-lime-300 mx-2" />
+        <Code className="size-4 text-emerald-500 mx-2" />
         <span className="text-zinc-300 text-[10px] gap-1 flex">
           Sound Effect by
           <a

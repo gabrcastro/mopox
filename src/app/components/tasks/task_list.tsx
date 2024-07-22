@@ -2,7 +2,7 @@ import { PlusIcon } from "lucide-react";
 import { TaskItem } from "./task_item";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { addTask } from "@/lib/features/tasks/tasks.slice";
+import { addTask, setTasks } from "@/lib/features/tasks/tasks.slice";
 import { RootState } from "@/lib/store";
 import { Task } from "../../domain/model/task";
 import clsx from "clsx";
@@ -11,14 +11,19 @@ export default function TaskListComponent() {
   const tasks = useSelector((state: RootState) => state.tasks.tasks);
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
-  const [allTasks, setAllTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-    setAllTasks(tasks);
+    const storedTasks: Task[] = JSON.parse(
+      localStorage.getItem("tasks") || "[]"
+    );
+    dispatch(setTasks(storedTasks));
     setIsLoading(false);
-  }, [tasks]);
+  }, [setIsLoading, dispatch]);
+
+  useEffect(() => {
+    if (!isLoading) localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [isLoading, tasks]);
 
   const handleAddTask = () => {
     const newTask: Task = {
@@ -41,7 +46,7 @@ export default function TaskListComponent() {
         <button
           type="button"
           onClick={handleAddTask}
-          className="px-4 min-h-11 rounded-xl hover:brightness-90 flex items-center bg-lime-500 shadow-shape"
+          className="px-4 min-h-11 rounded-xl hover:brightness-90 flex items-center bg-emerald-500 shadow-shape"
         >
           <span className={clsx("hidden md:flex mr-2 text-sm text-zinc-950")}>
             Adicionar
@@ -56,7 +61,7 @@ export default function TaskListComponent() {
           <span className="bg-zinc-900 rounded-xl animate-pulse h-14 w-full mb-1"></span>
         </div>
       )}
-      {!isLoading && allTasks.length === 0 ? (
+      {!isLoading && tasks.length === 0 ? (
         <div className="w-full h-full flex items-center justify-center">
           <p className="text-zinc-500 text-xs font-light text-center">
             Nenhuma tarefa encontrada. <br />
@@ -65,7 +70,7 @@ export default function TaskListComponent() {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-start gap-2 w-full h-full pb-10">
-          {allTasks.map((task: Task) => (
+          {tasks.map((task: Task) => (
             <TaskItem key={task.id} task={task} />
           ))}
         </div>

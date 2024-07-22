@@ -6,6 +6,7 @@ import {
   pause,
   setInitialState,
   setTimer,
+  showNotification,
   start,
   stop,
 } from "@/lib/features/timer/timer.slice";
@@ -26,30 +27,24 @@ export function TimerComponent() {
 
   useEffect(() => {
     let min = localStorage.getItem("minutes");
-    let sec = localStorage.getItem("seconds");
+    if (!min) min = "25";
 
-    if (!min && !sec) {
-      console.error("No timer saved");
-      min = "25";
-      sec = "0";
-    }
-
-    dispatch(setTimer({ min: +min!, sec: +sec! }));
+    dispatch(setTimer(+min!));
     setIsLoading(false);
   }, [setIsLoading, dispatch]);
 
   useEffect(() => {
     const audioAlarm = new Audio("/sounds/alarm.mp3");
 
-    if (minutes === 0 && seconds === 0) {
+    if (minutes === 0 && seconds === 0 && isRunning) {
       dispatch(alarm());
       if (alarming) {
         audioAlarm.play();
         setIsAlarming(true);
+        // dispatch(showNotification(true));
         setTimeout(() => {
           const min = localStorage.getItem("minutes") ?? 25;
-          const sec = localStorage.getItem("seconds") ?? 0;
-          dispatch(stop({ min: +min, sec: +sec }));
+          dispatch(stop(+min));
           if (intervalIdRef.current !== null) {
             clearInterval(intervalIdRef.current);
             intervalIdRef.current = null;
@@ -74,8 +69,10 @@ export function TimerComponent() {
   }
 
   function stopTimer(intervalId: number) {
+    let min = localStorage.getItem("minutes");
+    if (!min) min = "25";
     clearInterval(intervalId);
-    dispatch(setInitialState());
+    dispatch(stop(+min));
   }
 
   function handleStartTimer() {

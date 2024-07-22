@@ -4,18 +4,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface State {
   tasks: Task[];
 }
-const getInitialTasks = (): Task[] => {
-  try {
-    const storedTasks = localStorage.getItem("tasks");
-    return storedTasks ? JSON.parse(storedTasks) : [];
-  } catch (error) {
-    console.error("Erro ao ler tarefas do localStorage:", error);
-    return [];
-  }
-};
 
 const initialState: State = {
-  tasks: getInitialTasks(),
+  tasks: [],
 };
 
 export const taskSlice = createSlice({
@@ -24,6 +15,9 @@ export const taskSlice = createSlice({
   reducers: {
     clearTasks: (state) => {
       state.tasks = [];
+    },
+    setTasks: (state, action: PayloadAction<Task[]>) => {
+      state.tasks = action.payload;
     },
     addTask: (state, action: PayloadAction<Task>) => {
       state.tasks.push(action.payload);
@@ -34,5 +28,5 @@ export const taskSlice = createSlice({
   },
 });
 
-export const { clearTasks, addTask, removeTask } = taskSlice.actions;
+export const { clearTasks, setTasks, addTask, removeTask } = taskSlice.actions;
 export default taskSlice.reducer;

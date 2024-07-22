@@ -4,26 +4,26 @@ import { closeSettings } from "@/lib/features/settings/settings.slice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { useEffect } from "react";
 import { ModalComponent } from "../modal/modal";
+import { SettingsItemComponent } from "./settings_item";
 import {
   setInitialState,
   setMinutes,
+  setPauseTimer,
   setSeconds,
   setTimer,
 } from "@/lib/features/timer/timer.slice";
 import { clearTasks } from "@/lib/features/tasks/tasks.slice";
+import { ToggleButton } from "../toggle/toggle_button";
 
 interface SettingsProps {}
 export default function SettingsComponent({}: SettingsProps) {
-  const { minutes, seconds } = useAppSelector((state) => state.counter);
+  const { minutes, pauseTimer } = useAppSelector((state) => state.counter);
   const { tasks } = useAppSelector((state) => state.tasks);
-  // const [min, setMin] = useState(minutes);
-  // const [sec, setSec] = useState(seconds);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     localStorage.setItem("minutes", minutes.toString());
-    localStorage.setItem("seconds", seconds.toString());
-  }, [minutes, seconds]);
+  }, [minutes]);
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -34,7 +34,7 @@ export default function SettingsComponent({}: SettingsProps) {
   }
 
   function handleSaveSettings() {
-    dispatch(setTimer({ min: minutes, sec: seconds }));
+    dispatch(setTimer(minutes));
     dispatch(closeSettings());
   }
 
@@ -51,8 +51,7 @@ export default function SettingsComponent({}: SettingsProps) {
             <ToggleButton />
           </div> */}
 
-        <div className="flex items-center justify-between p-4 rounded-xl border-[.5px] border-zinc-800">
-          <span className="text-zinc-400 text-base flex-1">Tempo</span>
+        <SettingsItemComponent title="Tempo">
           <div className="flex flex-col gap-4">
             <div className="flex flex-row gap-2 items-center">
               <input
@@ -65,19 +64,34 @@ export default function SettingsComponent({}: SettingsProps) {
               />
               <span className="text-zinc-400 text-xs mr-2">Minutos</span>
             </div>
+          </div>
+        </SettingsItemComponent>
+
+        <SettingsItemComponent title="Pausa">
+          <div className="flex flex-col gap-4">
             <div className="flex flex-row gap-2 items-center">
               <input
                 type="number"
                 className="text-zinc-400 text-base bg-transparent w-min max-w-10 focus:outline-none"
-                value={seconds.toString().padStart(2, "0")}
-                onChange={(value) => dispatch(setSeconds(value.target.value))}
+                value={pauseTimer.toString()}
+                onChange={(value) =>
+                  dispatch(setPauseTimer(value.target.value))
+                }
                 max={60}
-                min={0}
+                min={1}
               />
-              <span className="text-zinc-400 text-xs mr-2">Segundos</span>
+              <span className="text-zinc-400 text-xs mr-2">Minutos</span>
             </div>
           </div>
-        </div>
+        </SettingsItemComponent>
+
+        <SettingsItemComponent title="Mutar alarme">
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-row gap-2 items-center">
+              <ToggleButton />
+            </div>
+          </div>
+        </SettingsItemComponent>
 
         <div className="flex gap-2">
           <button
@@ -85,9 +99,7 @@ export default function SettingsComponent({}: SettingsProps) {
             onClick={handleResetSettings}
             className="rounded-xl bg-red-400 p-2 w-[60%] mt-10 hover:brightness-90"
           >
-            <span className="text-zinc-900 text-base">
-              Reset & Limpar tarefas
-            </span>
+            <span className="text-zinc-900 text-base">Voltar ao padrão</span>
           </button>
           <button
             type="button"
