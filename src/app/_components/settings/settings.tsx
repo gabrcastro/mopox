@@ -2,19 +2,20 @@
 
 import { closeSettings } from "@/lib/features/settings/settings.slice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { X } from "lucide-react";
-import { useEffect, useState } from "react";
-import { ToggleButton } from "../toggle/toggle_button";
+import { useEffect } from "react";
 import { ModalComponent } from "../modal/modal";
 import {
+  setInitialState,
   setMinutes,
   setSeconds,
   setTimer,
 } from "@/lib/features/timer/timer.slice";
+import { clearTasks } from "@/lib/features/tasks/tasks.slice";
 
 interface SettingsProps {}
 export default function SettingsComponent({}: SettingsProps) {
   const { minutes, seconds } = useAppSelector((state) => state.counter);
+  const { tasks } = useAppSelector((state) => state.tasks);
   // const [min, setMin] = useState(minutes);
   // const [sec, setSec] = useState(seconds);
   const dispatch = useAppDispatch();
@@ -24,6 +25,10 @@ export default function SettingsComponent({}: SettingsProps) {
     localStorage.setItem("seconds", seconds.toString());
   }, [minutes, seconds]);
 
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
   function handleCloseSettingsModal() {
     dispatch(closeSettings());
   }
@@ -31,6 +36,11 @@ export default function SettingsComponent({}: SettingsProps) {
   function handleSaveSettings() {
     dispatch(setTimer({ min: minutes, sec: seconds }));
     dispatch(closeSettings());
+  }
+
+  function handleResetSettings() {
+    dispatch(setInitialState());
+    dispatch(clearTasks());
   }
 
   return (
@@ -72,6 +82,7 @@ export default function SettingsComponent({}: SettingsProps) {
         <div className="flex gap-2">
           <button
             type="button"
+            onClick={handleResetSettings}
             className="rounded-xl bg-red-400 p-2 w-[60%] mt-10 hover:brightness-90"
           >
             <span className="text-zinc-900 text-base">

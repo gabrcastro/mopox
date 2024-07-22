@@ -22,6 +22,7 @@ export function TimerComponent() {
   const dispatch = useAppDispatch();
   const intervalIdRef = useRef<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAlarming, setIsAlarming] = useState(false);
 
   useEffect(() => {
     const min = localStorage.getItem("minutes");
@@ -38,18 +39,25 @@ export function TimerComponent() {
 
   useEffect(() => {
     const audioAlarm = new Audio("/sounds/alarm.mp3");
+
     if (minutes === 0 && seconds === 0) {
       dispatch(alarm());
       if (alarming) {
         audioAlarm.play();
+        setIsAlarming(true);
         setTimeout(() => {
           const min = localStorage.getItem("minutes") ?? 25;
           const sec = localStorage.getItem("seconds") ?? 0;
           dispatch(stop({ min: +min, sec: +sec }));
+          if (intervalIdRef.current !== null) {
+            clearInterval(intervalIdRef.current);
+            intervalIdRef.current = null;
+          }
+          setIsAlarming(false);
         }, 5000);
       }
     }
-  }, [minutes, seconds, alarming, dispatch]);
+  }, [minutes, seconds, alarming, dispatch, isRunning]);
 
   function startTimer() {
     const intervalId = setInterval(() => {
@@ -90,15 +98,6 @@ export function TimerComponent() {
     }
   }
 
-  // useEffect(() => {
-  //   // Cleanup the interval when the component unmounts
-  //   return () => {
-  //     if (intervalIdRef.current !== null) {
-  //       stopTimer(intervalIdRef.current);
-  //     }
-  //   };
-  // }, [stopTimer]);
-
   return (
     <div className="flex flex-col items-center justify-center gap-4 mt-24 ">
       {isLoading ? (
@@ -114,8 +113,10 @@ export function TimerComponent() {
           onClick={handleStartTimer}
           className={clsx(
             isRunning ? "hidden" : "",
+            isAlarming ? "disabled:opacity-60" : "hover:brightness-150",
             "p-3 border-[.5px] border-zinc-700 rounded-xl hover:brightness-150"
           )}
+          disabled={isAlarming}
           type="button"
         >
           <PlayIcon className="text-zinc-300 size-5" />
@@ -124,15 +125,21 @@ export function TimerComponent() {
           onClick={handlePauseTimer}
           className={clsx(
             isRunning ? "" : "hidden",
-            "p-3 border-[.5px] border-zinc-700 rounded-xl hover:brightness-150"
+            isAlarming ? "disabled:opacity-60" : "hover:brightness-150",
+            "p-3 border-[.5px] border-zinc-700 rounded-xl "
           )}
+          disabled={isAlarming}
           type="button"
         >
           <PauseIcon className="text-zinc-300 size-5" />
         </button>
         <button
           onClick={handleStopTimer}
-          className="p-3 border-[.5px] border-zinc-700 rounded-xl hover:brightness-150"
+          className={clsx(
+            isAlarming ? "disabled:opacity-60" : "hover:brightness-150",
+            "p-3 border-[.5px] border-zinc-700 rounded-xl "
+          )}
+          disabled={isAlarming}
           type="button"
         >
           <RotateCcwIcon className="text-zinc-300 size-5" />
