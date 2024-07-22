@@ -6,6 +6,9 @@ export interface State {
   seconds: number;
   isRunning: boolean;
   alarming: boolean;
+  isPause: boolean;
+  notification: boolean;
+  notificationMessage: string;
 }
 
 export const initialState: State = {
@@ -14,6 +17,9 @@ export const initialState: State = {
   seconds: 0,
   isRunning: false,
   alarming: false,
+  isPause: false,
+  notification: false,
+  notificationMessage: "string",
 };
 
 export const timerSlice = createSlice({
@@ -26,6 +32,9 @@ export const timerSlice = createSlice({
       state.seconds = 0;
       state.isRunning = false;
       state.alarming = false;
+      state.isPause = false;
+      state.notification = false;
+      state.notificationMessage = "";
     },
     decrement: (state) => {
       if (state.seconds === 0) {
@@ -48,6 +57,9 @@ export const timerSlice = createSlice({
       state.seconds = 0;
       state.isRunning = false;
       state.alarming = false;
+      state.isPause = false;
+      state.notification = false;
+      state.notificationMessage = "";
     },
     setTimer: (state, action: PayloadAction<number>) => {
       state.minutes = action.payload;
@@ -64,6 +76,15 @@ export const timerSlice = createSlice({
     alarm: (state) => {
       state.alarming = true;
     },
+    setIsPause: (state) => {
+      state.isPause = true;
+    },
+    showNotification: (state, action: PayloadAction<boolean>) => {
+      state.notification = action.payload;
+    },
+    putMessageNotification: (state, action: PayloadAction<string>) => {
+      state.notificationMessage = action.payload;
+    },
   },
 });
 
@@ -78,5 +99,8 @@ export const {
   setSeconds,
   setTimer,
   alarm,
+  setIsPause,
+  showNotification,
+  putMessageNotification,
 } = timerSlice.actions;
 export default timerSlice.reducer;

@@ -15,10 +15,12 @@ export function HeaderComponent() {
   }
 
   return (
-    <div className="fixed flex flex-row w-[90%] md:w-[70%] justify-between items-center py-5 bg-zinc-950">
+    <div className="fixed flex flex-row w-[90%] md:w-[70%] justify-between items-center py-5 bg-neutral-950">
       <div className="flex gap-2">
         {/* <Timer className="size-6 text-zinc-300" /> */}
-        <span className="text-zinc-300 font-medium text-xl">mopox</span>
+        <a href="/" className="text-zinc-300 font-medium text-xl">
+          mopox
+        </a>
       </div>
 
       <div className="flex flex-row gap-4">

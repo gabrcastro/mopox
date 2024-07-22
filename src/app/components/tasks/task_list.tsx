@@ -46,7 +46,7 @@ export default function TaskListComponent() {
         <button
           type="button"
           onClick={handleAddTask}
-          className="px-4 min-h-11 rounded-xl hover:brightness-90 flex items-center bg-lime-500 shadow-shape"
+          className="px-4 min-h-11 rounded-xl hover:brightness-90 flex items-center bg-emerald-500 shadow-shape"
         >
           <span className={clsx("hidden md:flex mr-2 text-sm text-zinc-950")}>
             Adicionar

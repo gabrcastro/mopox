@@ -6,6 +6,7 @@ import {
   pause,
   setInitialState,
   setTimer,
+  showNotification,
   start,
   stop,
 } from "@/lib/features/timer/timer.slice";
@@ -40,6 +41,7 @@ export function TimerComponent() {
       if (alarming) {
         audioAlarm.play();
         setIsAlarming(true);
+        // dispatch(showNotification(true));
         setTimeout(() => {
           const min = localStorage.getItem("minutes") ?? 25;
           dispatch(stop(+min));

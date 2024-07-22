@@ -99,9 +99,7 @@ export default function SettingsComponent({}: SettingsProps) {
             onClick={handleResetSettings}
             className="rounded-xl bg-red-400 p-2 w-[60%] mt-10 hover:brightness-90"
           >
-            <span className="text-zinc-900 text-base">
-              Reset & Limpar tarefas
-            </span>
+            <span className="text-zinc-900 text-base">Voltar ao padrão</span>
           </button>
           <button
             type="button"
