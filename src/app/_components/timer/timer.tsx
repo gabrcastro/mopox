@@ -25,12 +25,13 @@ export function TimerComponent() {
   const [isAlarming, setIsAlarming] = useState(false);
 
   useEffect(() => {
-    const min = localStorage.getItem("minutes");
-    const sec = localStorage.getItem("seconds");
+    let min = localStorage.getItem("minutes");
+    let sec = localStorage.getItem("seconds");
 
     if (!min && !sec) {
       console.error("No timer saved");
-      throw new Error("No timer saved");
+      min = "25";
+      sec = "0";
     }
 
     dispatch(setTimer({ min: +min!, sec: +sec! }));
