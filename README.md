@@ -2,12 +2,12 @@
 
 <div>
   <img src="https://shields.microej.com/badge/release-beta-red" />
-  <a href="mopox.vercel.app" target="_blank">
+  <a href="https://www.mopox.vercel.app" target="_blank" >
     <img src="https://shields.microej.com/badge/-Acessar%20mopox-blue" />
   </a>
 </div>
 
-<br />
+<br/>
 
 Mopox é uma aplicação minimalista focada em gerenciamento curto de tarefas com uso do pomodoro.
 
@@ -20,4 +20,8 @@ Mopox é uma aplicação minimalista focada em gerenciamento curto de tarefas co
 
 - Estatísticas
 
-<img src="/public/images/desktop.jpeg" alt"mopox web" />
+<br/>
+
+<div>
+  <img src="./public/images/desktop.jpeg" alt"mopox web" />
+</div>
