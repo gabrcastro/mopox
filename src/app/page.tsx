@@ -26,11 +26,7 @@ export default function Home() {
       </div>
 
       <div className="relative my-20 flex items-center w-[80%] md:w-[70%]  ">
-        <img
-          src={"/images/desktop.jpeg"}
-          alt=""
-          className="justify-center rounded-xl border-[.5px] border-zinc-800 shadow-shape"
-        />
+        <img src={"/images/app.png"} alt="" />
         {/* <img
           src={"/images/mobile.jpeg"}
           alt=""
