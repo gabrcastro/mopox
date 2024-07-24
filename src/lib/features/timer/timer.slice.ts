@@ -49,7 +49,7 @@ export const timerSlice = createSlice({
           state.seconds = 59;
         }
       } else {
-        state.seconds -= 60; // TODO: go back to 1;
+        state.seconds -= 1;
       }
     },
     start: (state) => {
@@ -71,6 +71,7 @@ export const timerSlice = createSlice({
     ) => {
       state.minutes = action.payload.min;
       state.pauseMinutes = action.payload.pause ?? 5;
+      state.seconds = 0;
     },
     setMinutes: (state, action: PayloadAction<string>) => {
       state.minutes = +action.payload;

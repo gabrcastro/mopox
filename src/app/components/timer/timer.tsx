@@ -85,7 +85,12 @@ export function TimerComponent() {
     const { min, pause } = getAndSetTimer();
     clearInterval(intervalId);
     dispatch(stop());
-    dispatch(setTimer({ min: +min, pause: +pause }));
+
+    if (isPause) {
+      dispatch(setTimer({ min: +pause, pause: +pause }));
+    } else {
+      dispatch(setTimer({ min: +min, pause: +pause }));
+    }
   }
 
   function handleStartTimer() {
