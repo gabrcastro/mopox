@@ -2,13 +2,12 @@
 
 import { closeSettings } from "@/lib/features/settings/settings.slice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ModalComponent } from "../modal/modal";
 import { SettingsItemComponent } from "./settings_item";
 import {
   setInitialState,
-  setMinutes,
-  setpauseMinutes,
+  setIsPause,
   setTimer,
   showNotification,
 } from "@/lib/features/timer/timer.slice";
@@ -16,14 +15,15 @@ import { clearTasks } from "@/lib/features/tasks/tasks.slice";
 
 interface SettingsProps {}
 export default function SettingsComponent({}: SettingsProps) {
-  const { minutes, pauseMinutes } = useAppSelector((state) => state.counter);
   const { tasks } = useAppSelector((state) => state.tasks);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    localStorage.setItem("minutes", minutes.toString());
-    localStorage.setItem("pause", pauseMinutes.toString());
-  }, [minutes, pauseMinutes]);
+  const [min, setMin] = useState(
+    JSON.parse(localStorage.getItem("minutes") || "25")
+  );
+  const [pause, setPause] = useState(
+    JSON.parse(localStorage.getItem("pause") || "5")
+  );
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -34,7 +34,10 @@ export default function SettingsComponent({}: SettingsProps) {
   }
 
   function handleSaveSettings() {
-    dispatch(setTimer({ min: minutes, pause: pauseMinutes }));
+    localStorage.setItem("minutes", min.toString());
+    localStorage.setItem("pause", pause.toString());
+    dispatch(setIsPause(false));
+    dispatch(setTimer({ min: min, pause: pause }));
     dispatch(closeSettings());
     dispatch(showNotification(true));
   }
@@ -58,8 +61,8 @@ export default function SettingsComponent({}: SettingsProps) {
               <input
                 type="number"
                 className="text-zinc-400 text-base bg-transparent w-min max-w-10 focus:outline-none"
-                value={minutes.toString()}
-                onChange={(value) => dispatch(setMinutes(value.target.value))}
+                value={min}
+                onChange={(value) => setMin(value.target.value)}
                 max={60}
                 min={1}
               />
@@ -74,10 +77,8 @@ export default function SettingsComponent({}: SettingsProps) {
               <input
                 type="number"
                 className="text-zinc-400 text-base bg-transparent w-min max-w-10 focus:outline-none"
-                value={pauseMinutes.toString()}
-                onChange={(value) =>
-                  dispatch(setpauseMinutes(value.target.value))
-                }
+                value={pause}
+                onChange={(value) => setPause(value.target.value)}
                 max={60}
                 min={1}
               />

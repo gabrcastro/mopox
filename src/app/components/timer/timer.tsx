@@ -43,11 +43,6 @@ export function TimerComponent() {
         setIsAlarming(true);
         setTimeout(() => {
           dispatch(stop());
-
-          console.log(minutes);
-          console.log(pauseMinutes);
-          console.log(isPause);
-
           dispatch(
             setTimer({
               min: isPause ? +getAndSetTimer().min : +getAndSetTimer().pause,
@@ -59,10 +54,6 @@ export function TimerComponent() {
           }
           setIsAlarming(false);
           dispatch(setIsPause(!isPause));
-
-          console.log(minutes);
-          console.log(pauseMinutes);
-          console.log(isPause);
         }, 5000);
       }
     }
