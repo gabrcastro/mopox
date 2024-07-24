@@ -9,11 +9,10 @@ import {
   setInitialState,
   setMinutes,
   setpauseMinutes,
-  setSeconds,
   setTimer,
+  showNotification,
 } from "@/lib/features/timer/timer.slice";
 import { clearTasks } from "@/lib/features/tasks/tasks.slice";
-import { ToggleButton } from "../toggle/toggle_button";
 
 interface SettingsProps {}
 export default function SettingsComponent({}: SettingsProps) {
@@ -37,16 +36,12 @@ export default function SettingsComponent({}: SettingsProps) {
   function handleSaveSettings() {
     dispatch(setTimer({ min: minutes, pause: pauseMinutes }));
     dispatch(closeSettings());
+    dispatch(showNotification(true));
   }
 
   function handleResetSettings() {
     dispatch(setInitialState());
     dispatch(clearTasks());
-  }
-
-  function handleMuteSound() {
-    const isMuted = JSON.parse(localStorage.getItem("muted") || "false");
-    localStorage.setItem("muted", JSON.stringify(!isMuted));
   }
 
   return (
@@ -106,7 +101,7 @@ export default function SettingsComponent({}: SettingsProps) {
             className="rounded-xl bg-red-400 p-2 w-[60%] mt-10 hover:brightness-90"
           >
             <span className="text-zinc-900 text-base">
-              Limpar lista & voltar ao padrao
+              Limpar lista & voltar ao padrão
             </span>
           </button>
           <button

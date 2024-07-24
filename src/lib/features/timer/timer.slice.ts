@@ -49,7 +49,7 @@ export const timerSlice = createSlice({
           state.seconds = 59;
         }
       } else {
-        state.seconds -= 60; //1;
+        state.seconds -= 60; // TODO: go back to 1;
       }
     },
     start: (state) => {
@@ -62,7 +62,6 @@ export const timerSlice = createSlice({
       state.seconds = 0;
       state.isRunning = false;
       state.alarming = false;
-      state.isPause = false;
       state.timerChanged = false;
       state.notificationMessage = "";
     },
@@ -85,8 +84,8 @@ export const timerSlice = createSlice({
     alarm: (state) => {
       state.alarming = true;
     },
-    setIsPause: (state) => {
-      state.isPause = !state.isPause;
+    setIsPause: (state, action: PayloadAction<boolean>) => {
+      state.isPause = action.payload;
     },
     setChanged: (state, action: PayloadAction<boolean>) => {
       state.timerChanged = true;

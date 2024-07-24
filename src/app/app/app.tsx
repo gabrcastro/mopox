@@ -5,7 +5,6 @@ import LayoutDefault from "../components/layout.default";
 import SettingsModal from "../components/settings/settings";
 import { TasksComponent } from "../components/tasks/tasks";
 import { TimerComponent } from "../components/timer/timer";
-import { AuthModal } from "../components/auth/auth";
 import { NotificationComponent } from "../components/notification/notification";
 
 export default function App() {
@@ -20,8 +19,8 @@ export default function App() {
       {/* {authOpened && <AuthModal />} */}
       {notification && (
         <NotificationComponent
-          type="alarm"
-          message={isPause ? "Sua pausa terminou" : "Hora da pausa"}
+          type="default"
+          message={"Suas configurações foram salvas com sucesso!"}
         />
       )}
     </LayoutDefault>

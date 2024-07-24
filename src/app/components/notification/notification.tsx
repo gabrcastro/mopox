@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import clsx from "clsx";
 import { AlarmClockIcon, X } from "lucide-react";
 import { ModalComponent } from "../modal/modal";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 interface NotificationProps {
   type: "error" | "warning" | "alarm" | "success" | "default";
@@ -18,23 +18,34 @@ interface NotificationProps {
 }
 
 export function NotificationComponent({ type, message }: NotificationProps) {
-  const { isPause } = useAppSelector((state) => state.counter);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch(showNotification(false));
+    }, 5000);
+  });
+
+  function handleCloseNotification() {
+    dispatch(showNotification(false));
+  }
 
   return (
-    <ModalComponent title="">
-      <div className="flex items-center justify-center flex-col mb-10">
-        <img src="/images/breath.svg" alt="" className="w-[40%] mt-10" />
-        <div className="flex flex-col items-center mt-5">
+    <div className="absolute top-0 mt-20 md:w-[50%] w-[90%] py-3 px-5 bg-emerald-900 rounded-xl shadow-shape">
+      <div className="flex flex-col">
+        <div className="flex flex-row items-start justify-between">
           <span className="text-zinc-300 text-base font-light text-center">
-            {isPause ? "Hora da sua pausa!" : "Pronto?"}
+            {message}
           </span>
-          <span className="text-zinc-300 text-base font-light text-center">
-            {isPause
-              ? "Aproveite para caminhar, tomar um café, respirar um \nar puro e retornar cheio de energia e disposição."
-              : "Vamos começar mais um momento de foco e atenção."}
-          </span>
+          <button
+            onClick={handleCloseNotification}
+            type="button"
+            className="hover:cursor-pointer hover:brightness-90"
+          >
+            <X className="text-zinc-300 size-5" />
+          </button>
         </div>
       </div>
-    </ModalComponent>
+    </div>
   );
 }

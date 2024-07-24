@@ -6,7 +6,6 @@ import {
   pause,
   setIsPause,
   setTimer,
-  showNotification,
   start,
   stop,
 } from "@/lib/features/timer/timer.slice";
@@ -25,11 +24,7 @@ export function TimerComponent() {
   const [isAlarming, setIsAlarming] = useState(false);
 
   useEffect(() => {
-    let min = localStorage.getItem("minutes");
-    let pause = localStorage.getItem("minutes");
-    if (!min) min = "25";
-    if (!pause) pause = "5";
-
+    const { min, pause } = getAndSetTimer();
     dispatch(setTimer({ min: +min!, pause: +pause! }));
     setIsLoading(false);
   }, [setIsLoading, dispatch]);
@@ -46,22 +41,41 @@ export function TimerComponent() {
       if (alarming) {
         audioAlarm.play();
         setIsAlarming(true);
-        dispatch(showNotification(true));
         setTimeout(() => {
           dispatch(stop());
-          dispatch(setIsPause());
-          dispatch(setTimer({ min: isPause ? pauseMinutes : minutes }));
-          dispatch(showNotification(false));
+
+          console.log(minutes);
+          console.log(pauseMinutes);
+          console.log(isPause);
+
+          dispatch(
+            setTimer({
+              min: isPause ? +getAndSetTimer().min : +getAndSetTimer().pause,
+            })
+          );
           if (intervalIdRef.current !== null) {
             clearInterval(intervalIdRef.current);
             intervalIdRef.current = null;
           }
           setIsAlarming(false);
-          dispatch(setIsPause());
-        }, 6000);
+          dispatch(setIsPause(!isPause));
+
+          console.log(minutes);
+          console.log(pauseMinutes);
+          console.log(isPause);
+        }, 5000);
       }
     }
   }, [minutes, seconds, alarming, dispatch, isRunning, isPause, pauseMinutes]);
+
+  function getAndSetTimer() {
+    let min = localStorage.getItem("minutes");
+    let pause = localStorage.getItem("pause");
+    if (!min) min = "25";
+    if (!pause) pause = "5";
+
+    return { min, pause };
+  }
 
   function startTimer() {
     const intervalId = setInterval(() => {
@@ -77,11 +91,10 @@ export function TimerComponent() {
   }
 
   function stopTimer(intervalId: number) {
-    let min = localStorage.getItem("minutes");
-    if (!min) min = "25";
+    const { min, pause } = getAndSetTimer();
     clearInterval(intervalId);
     dispatch(stop());
-    dispatch(setTimer({ min: +min }));
+    dispatch(setTimer({ min: +min, pause: +pause }));
   }
 
   function handleStartTimer() {
@@ -107,6 +120,9 @@ export function TimerComponent() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 mt-24 ">
+      <span className="text-zinc-400 font-medium text-base">
+        {isPause ? "PAUSA" : "TIMER"}
+      </span>
       {isLoading ? (
         <span className="bg-zinc-900 rounded-xl animate-pulse h-9 w-28 mb-1"></span>
       ) : (
