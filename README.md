@@ -2,7 +2,7 @@
 
 <div>
   <img src="https://shields.microej.com/badge/release-beta-red" />
-  <a href="https://www.mopox.vercel.app" target="_blank" >
+  <a href="https://mopox.vercel.app" target="_blank" >
     <img src="https://shields.microej.com/badge/-Acessar%20mopox-blue" />
   </a>
 </div>
