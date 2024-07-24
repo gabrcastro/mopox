@@ -1,7 +1,16 @@
-import { showNotification } from "@/lib/features/timer/timer.slice";
+import {
+  decrement,
+  pause,
+  setIsPause,
+  setTimer,
+  showNotification,
+  start,
+} from "@/lib/features/timer/timer.slice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import clsx from "clsx";
 import { AlarmClockIcon, X } from "lucide-react";
+import { ModalComponent } from "../modal/modal";
+import { useRef } from "react";
 
 interface NotificationProps {
   type: "error" | "warning" | "alarm" | "success" | "default";
@@ -9,49 +18,23 @@ interface NotificationProps {
 }
 
 export function NotificationComponent({ type, message }: NotificationProps) {
-  const dispatch = useAppDispatch();
-
-  function handleCloseNotification() {
-    dispatch(showNotification(false));
-  }
+  const { isPause } = useAppSelector((state) => state.counter);
 
   return (
-    <div className="flex items-center justify-center w-full">
-      <div
-        className={clsx(
-          type === "alarm" || type === "success"
-            ? "bg-emerald-500"
-            : type === "error"
-              ? "bg-red-500"
-              : type === "warning"
-                ? "bg-amber-500"
-                : "bg-zinc-900",
-          "absolute top-0 mt-14  rounded-xl shadow-shape w-[90%] md:w-[50%] min-h-12"
-        )}
-      >
-        <div className="flex flex-row items-center justify-between w-full pr-3 pl-4 py-3">
-          <p
-            className={clsx(
-              type !== "default" ? "text-zinc-950" : "text-zinc-300",
-              "text-base"
-            )}
-          >
-            {message}
-          </p>
-          <button
-            onClick={handleCloseNotification}
-            type="button"
-            className="hover:brightness-90"
-          >
-            <X
-              className={clsx(
-                type !== "default" ? "text-zinc-950" : "text-zinc-300",
-                "size-5"
-              )}
-            />
-          </button>
+    <ModalComponent title="">
+      <div className="flex items-center justify-center flex-col mb-10">
+        <img src="/images/breath.svg" alt="" className="w-[40%] mt-10" />
+        <div className="flex flex-col items-center mt-5">
+          <span className="text-zinc-300 text-base font-light text-center">
+            {isPause ? "Hora da sua pausa!" : "Pronto?"}
+          </span>
+          <span className="text-zinc-300 text-base font-light text-center">
+            {isPause
+              ? "Aproveite para caminhar, tomar um café, respirar um \nar puro e retornar cheio de energia e disposição."
+              : "Vamos começar mais um momento de foco e atenção."}
+          </span>
         </div>
       </div>
-    </div>
+    </ModalComponent>
   );
 }

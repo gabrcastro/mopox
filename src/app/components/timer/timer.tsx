@@ -4,7 +4,7 @@ import {
   alarm,
   decrement,
   pause,
-  setInitialState,
+  setIsPause,
   setTimer,
   showNotification,
   start,
@@ -17,9 +17,8 @@ import { PauseIcon, PlayIcon, RotateCcwIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export function TimerComponent() {
-  const { minutes, seconds, isRunning, alarming } = useAppSelector(
-    (state) => state.counter
-  );
+  const { minutes, seconds, isRunning, alarming, isPause, pauseMinutes } =
+    useAppSelector((state) => state.counter);
   const dispatch = useAppDispatch();
   const intervalIdRef = useRef<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -27,11 +26,17 @@ export function TimerComponent() {
 
   useEffect(() => {
     let min = localStorage.getItem("minutes");
+    let pause = localStorage.getItem("minutes");
     if (!min) min = "25";
+    if (!pause) pause = "5";
 
-    dispatch(setTimer(+min!));
+    dispatch(setTimer({ min: +min!, pause: +pause! }));
     setIsLoading(false);
   }, [setIsLoading, dispatch]);
+
+  // useEffect(() => {
+  //   if ()
+  // }, [isPause])
 
   useEffect(() => {
     const audioAlarm = new Audio("/sounds/alarm.mp3");
@@ -41,19 +46,22 @@ export function TimerComponent() {
       if (alarming) {
         audioAlarm.play();
         setIsAlarming(true);
-        // dispatch(showNotification(true));
+        dispatch(showNotification(true));
         setTimeout(() => {
-          const min = localStorage.getItem("minutes") ?? 25;
-          dispatch(stop(+min));
+          dispatch(stop());
+          dispatch(setIsPause());
+          dispatch(setTimer({ min: isPause ? pauseMinutes : minutes }));
+          dispatch(showNotification(false));
           if (intervalIdRef.current !== null) {
             clearInterval(intervalIdRef.current);
             intervalIdRef.current = null;
           }
           setIsAlarming(false);
-        }, 5000);
+          dispatch(setIsPause());
+        }, 6000);
       }
     }
-  }, [minutes, seconds, alarming, dispatch, isRunning]);
+  }, [minutes, seconds, alarming, dispatch, isRunning, isPause, pauseMinutes]);
 
   function startTimer() {
     const intervalId = setInterval(() => {
@@ -72,7 +80,8 @@ export function TimerComponent() {
     let min = localStorage.getItem("minutes");
     if (!min) min = "25";
     clearInterval(intervalId);
-    dispatch(stop(+min));
+    dispatch(stop());
+    dispatch(setTimer({ min: +min }));
   }
 
   function handleStartTimer() {

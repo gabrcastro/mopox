@@ -8,7 +8,7 @@ import { SettingsItemComponent } from "./settings_item";
 import {
   setInitialState,
   setMinutes,
-  setPauseTimer,
+  setpauseMinutes,
   setSeconds,
   setTimer,
 } from "@/lib/features/timer/timer.slice";
@@ -17,13 +17,14 @@ import { ToggleButton } from "../toggle/toggle_button";
 
 interface SettingsProps {}
 export default function SettingsComponent({}: SettingsProps) {
-  const { minutes, pauseTimer } = useAppSelector((state) => state.counter);
+  const { minutes, pauseMinutes } = useAppSelector((state) => state.counter);
   const { tasks } = useAppSelector((state) => state.tasks);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     localStorage.setItem("minutes", minutes.toString());
-  }, [minutes]);
+    localStorage.setItem("pause", pauseMinutes.toString());
+  }, [minutes, pauseMinutes]);
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -34,13 +35,18 @@ export default function SettingsComponent({}: SettingsProps) {
   }
 
   function handleSaveSettings() {
-    dispatch(setTimer(minutes));
+    dispatch(setTimer({ min: minutes, pause: pauseMinutes }));
     dispatch(closeSettings());
   }
 
   function handleResetSettings() {
     dispatch(setInitialState());
     dispatch(clearTasks());
+  }
+
+  function handleMuteSound() {
+    const isMuted = JSON.parse(localStorage.getItem("muted") || "false");
+    localStorage.setItem("muted", JSON.stringify(!isMuted));
   }
 
   return (
@@ -73,9 +79,9 @@ export default function SettingsComponent({}: SettingsProps) {
               <input
                 type="number"
                 className="text-zinc-400 text-base bg-transparent w-min max-w-10 focus:outline-none"
-                value={pauseTimer.toString()}
+                value={pauseMinutes.toString()}
                 onChange={(value) =>
-                  dispatch(setPauseTimer(value.target.value))
+                  dispatch(setpauseMinutes(value.target.value))
                 }
                 max={60}
                 min={1}
@@ -85,13 +91,13 @@ export default function SettingsComponent({}: SettingsProps) {
           </div>
         </SettingsItemComponent>
 
-        <SettingsItemComponent title="Mutar alarme">
+        {/* <SettingsItemComponent title="Mutar alarme">
           <div className="flex flex-col gap-4">
             <div className="flex flex-row gap-2 items-center">
               <ToggleButton />
             </div>
           </div>
-        </SettingsItemComponent>
+        </SettingsItemComponent> */}
 
         <div className="flex gap-2">
           <button
@@ -99,7 +105,9 @@ export default function SettingsComponent({}: SettingsProps) {
             onClick={handleResetSettings}
             className="rounded-xl bg-red-400 p-2 w-[60%] mt-10 hover:brightness-90"
           >
-            <span className="text-zinc-900 text-base">Voltar ao padrão</span>
+            <span className="text-zinc-900 text-base">
+              Limpar lista & voltar ao padrao
+            </span>
           </button>
           <button
             type="button"

@@ -18,12 +18,12 @@ export default function App() {
       <TasksComponent />
       {settingsOpened && <SettingsModal />}
       {/* {authOpened && <AuthModal />} */}
-      {/* {notification && (
-          <NotificationComponent
-            type="alarm"
-            message={isPause ? "Sua pausa terminou" : "Hora da pausa"}
-          />
-        )} */}
+      {notification && (
+        <NotificationComponent
+          type="alarm"
+          message={isPause ? "Sua pausa terminou" : "Hora da pausa"}
+        />
+      )}
     </LayoutDefault>
   );
 }
