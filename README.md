@@ -24,5 +24,5 @@ Mopox é uma aplicação minimalista focada em gerenciamento curto de tarefas co
 - Estatísticas
 
 <div align="center">
-  <img src="./public/images/desktop.jpeg" alt"mopox web" width="500"/>
+  <img src="./public/images/app.png" alt"mopox web" width="500"/>
 </div>
